@@ -35,6 +35,9 @@ namespace Infrastructure.Data
         public DbSet<Paiement> Paiements =>
             Set<Paiement>();
 
+        public DbSet<User> Users =>
+            Set<User>();
+
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
         {
@@ -46,6 +49,7 @@ namespace Infrastructure.Data
             ConfigurerReservation(modelBuilder);
             ConfigurerSejour(modelBuilder);
             ConfigurerFacture(modelBuilder);
+            ConfigurerUser(modelBuilder);
             ConfigurerPaiement(modelBuilder);
             ConfigurerSuppressionLogique(modelBuilder);
         }
@@ -230,6 +234,10 @@ namespace Infrastructure.Data
                     .WithMany(x => x.Factures)
                     .HasForeignKey(x => x.ClientId)
                     .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(x => x.Sejour)
+                    .WithMany()
+                    .HasForeignKey(x => x.SejourId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
         }
 
@@ -252,6 +260,35 @@ namespace Infrastructure.Data
                     .WithMany(x => x.Paiements)
                     .HasForeignKey(x => x.FactureId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(x => x.User)
+                    .WithMany()
+                    .HasForeignKey(x => x.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+        }
+
+        private static void ConfigurerUser(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("Users");
+
+                entity.HasKey(x => x.Id);
+
+                entity.Property(x => x.Username)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(x => x.Email)
+                    .HasMaxLength(200);
+
+                entity.Property(x => x.PasswordHash)
+                    .IsRequired()
+                    .HasMaxLength(200);
+
+                entity.HasIndex(x => x.Username)
+                    .IsUnique();
             });
         }
 
@@ -277,6 +314,9 @@ namespace Infrastructure.Data
                 .HasQueryFilter(x => !x.IsDeleted);
 
             modelBuilder.Entity<Paiement>()
+                .HasQueryFilter(x => !x.IsDeleted);
+
+            modelBuilder.Entity<User>()
                 .HasQueryFilter(x => !x.IsDeleted);
         }
 
