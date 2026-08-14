@@ -1,8 +1,23 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Accueil";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mb-4">
+    <h1 class="display-4">Gestion Hôtelière</h1>
+    <p class="lead">Bienvenue. Accédez rapidement aux différentes sections de l'application :</p>
+</div>
+
+<div class="d-flex flex-wrap justify-content-center">
+    <a asp-controller="TypeChambres" asp-action="Index" class="btn btn-primary m-2">Types de chambres</a>
+    <a asp-controller="Chambres" asp-action="Index" class="btn btn-primary m-2">Chambres</a>
+    <a asp-controller="Clients" asp-action="Index" class="btn btn-primary m-2">Clients</a>
+    <a asp-controller="Reservations" asp-action="Index" class="btn btn-primary m-2">Réservations</a>
+    <a asp-controller="Sejours" asp-action="Index" class="btn btn-primary m-2">Séjours</a>
+    <a asp-controller="Factures" asp-action="Index" class="btn btn-primary m-2">Factures</a>
+    <a asp-controller="Paiements" asp-action="Index" class="btn btn-primary m-2">Paiements</a>
+    <a asp-controller="Users" asp-action="Index" class="btn btn-primary m-2">Utilisateurs</a>
+</div>
+
+<div class="mt-4 text-center">
+    <p>Utilisez le menu ci-dessus ou la barre de navigation pour naviguer dans l'application.</p>
 </div>

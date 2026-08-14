@@ -1,0 +1,137 @@
+@model IEnumerable<GestionHoteliere.Domain.Entities.Reservation>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroReservation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Client)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Chambre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeChambre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateArrivee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateDepart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Statut)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NombrePersonnes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MontantEstime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedById)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdatedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdatedById)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsDeleted)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeletedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeletedById)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RowVersion)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroReservation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.Nom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Chambre.Numero)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeChambre.Libelle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCreation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateArrivee)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateDepart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Statut)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombrePersonnes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MontantEstime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedById)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedById)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDeleted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeletedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeletedById)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RowVersion)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
