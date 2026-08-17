@@ -8,6 +8,7 @@ namespace GestionHoteliere.Domain.Entities
     {
         [Required]
         [MaxLength(100)]
+        [Display(Name = "Prénom")]
         public string Prenom { get; set; } = string.Empty;
 
         [Required]
@@ -20,14 +21,17 @@ namespace GestionHoteliere.Domain.Entities
 
         [Phone]
         [MaxLength(50)]
+        [Display(Name = "Téléphone")]
         public string? Telephone { get; set; }
 
         [MaxLength(300)]
         public string? Adresse { get; set; }
 
+        [Display(Name = "Date de naissance")]
         public DateTime? DateNaissance { get; set; }
 
         [MaxLength(100)]
+        [Display(Name = "N° pièce d’identité")]
         public string? IdentifiantNational { get; set; }
 
         public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();

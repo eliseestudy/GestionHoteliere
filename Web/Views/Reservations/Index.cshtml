@@ -1,137 +1,24 @@
-@model IEnumerable<GestionHoteliere.Domain.Entities.Reservation>
+@model IEnumerable<Web.Models.ReservationListItemViewModel>
+@{ ViewData["Title"] = "Réservations"; var rows = Model.ToList(); }
 
-@{
-    ViewData["Title"] = "Index";
-}
-
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.NumeroReservation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Client)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Chambre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TypeChambre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateArrivee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateDepart)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Statut)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NombrePersonnes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MontantEstime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedById)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedById)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDeleted)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeletedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeletedById)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RowVersion)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
+<div class="page-heading"><div><span class="page-eyebrow">Exploitation</span><h1>Réservations</h1></div><a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nouvelle réservation</a></div>
+<div class="crud-toolbar">
+    <div><label for="reservationSearch">Rechercher</label><div class="input-group"><span class="input-group-text"><i class="bi bi-search"></i></span><input id="reservationSearch" class="form-control" data-table="#reservationsTable" data-dt-search placeholder="N°, client, chambre…" /></div></div>
+    <div><label for="reservationStatus">Statut</label><select id="reservationStatus" class="form-select" data-table="#reservationsTable" data-column-filter data-column="6"><option value="">Tous</option>@foreach (var value in rows.Select(x => x.Reservation.Statut.ToString()).Distinct().OrderBy(x => x)) { <option value="@value">@value</option> }</select></div>
+    <div><label for="reservationType">Type de chambre</label><select id="reservationType" class="form-select" data-table="#reservationsTable" data-column-filter data-column="2"><option value="">Tous</option>@foreach (var value in rows.Select(x => x.Reservation.TypeChambre?.Libelle).Where(x => !string.IsNullOrWhiteSpace(x)).Distinct().OrderBy(x => x)) { <option value="@value">@value</option> }</select></div>
+    <div><label>Période d’arrivée</label><div class="d-flex gap-2"><input id="reservationArrivalMin" type="date" class="form-control" data-table="#reservationsTable" data-filter-type="date-min" data-column="4" aria-label="Arrivée à partir du" /><input id="reservationArrivalMax" type="date" class="form-control" data-table="#reservationsTable" data-filter-type="date-max" data-column="4" aria-label="Arrivée jusqu’au" /><button type="button" class="btn btn-outline-secondary" data-reset-table="#reservationsTable" title="Réinitialiser"><i class="bi bi-arrow-counterclockwise"></i></button></div></div>
+</div>
+<div class="crud-table-card">
+<table id="reservationsTable" class="table table-hover align-middle js-data-table" data-order='[[4,"asc"]]'>
+    <thead><tr><th>N° réservation</th><th>Client</th><th>Type de chambre</th><th>Chambre</th><th>Arrivée</th><th>Départ</th><th>Statut</th><th class="text-end">Montant estimé</th><th class="all no-sort text-end">Actions</th></tr></thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in rows) { var r = item.Reservation;
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumeroReservation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Client.Nom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Chambre.Numero)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TypeChambre.Libelle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateArrivee)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateDepart)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Statut)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombrePersonnes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MontantEstime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedById)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedById)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDeleted)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeletedAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeletedById)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RowVersion)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+            <td class="fw-semibold">@r.NumeroReservation</td><td>@r.Client?.Prenom @r.Client?.Nom</td><td>@(r.TypeChambre?.Libelle ?? "-")</td><td>@(r.Chambre?.Numero ?? "À assigner")</td>
+            <td data-filter="@r.DateArrivee.ToString("yyyy-MM-dd")" data-order="@r.DateArrivee.ToUnixTimeSeconds()">@r.DateArrivee.ToString("dd/MM/yyyy")</td><td data-order="@r.DateDepart.ToUnixTimeSeconds()">@r.DateDepart.ToString("dd/MM/yyyy")</td><td><span class="badge text-bg-secondary">@r.Statut</span></td><td class="text-end" data-filter="@r.MontantEstime" data-order="@r.MontantEstime">@r.MontantEstime.ToString("N0") FCFA</td>
+            <td><div class="table-actions"><a asp-action="Details" asp-route-id="@r.Id" class="btn btn-sm btn-outline-success" title="Voir" data-bs-toggle="tooltip"><i class="bi bi-eye"></i></a>@if (item.CanCheckIn) { <a asp-action="CheckIn" asp-route-id="@r.Id" class="btn btn-sm btn-primary" title="Faire le check-in" data-bs-toggle="tooltip"><i class="bi bi-box-arrow-in-right"></i></a> }<div class="dropdown"><button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown" aria-label="Actions"><i class="bi bi-three-dots-vertical"></i></button><ul class="dropdown-menu dropdown-menu-end"><li><a class="dropdown-item" asp-action="Edit" asp-route-id="@r.Id"><i class="bi bi-pencil"></i> Modifier</a></li>@if (item.CanConfirm) { <li><button class="dropdown-item js-confirm-action" data-post-url="@Url.Action("Confirm", new { id = r.Id })" data-confirm-title="Confirmer la réservation" data-confirm-message="Confirmer cette réservation ?" data-confirm-class="btn-primary"><i class="bi bi-check-circle"></i> Confirmer</button></li> }@if (item.CanCancel) { <li><button class="dropdown-item js-confirm-action" data-post-url="@Url.Action("Cancel", new { id = r.Id })" data-confirm-title="Annuler la réservation" data-confirm-message="Annuler cette réservation ?"><i class="bi bi-x-circle"></i> Annuler</button></li> }@if (item.CanNoShow) { <li><button class="dropdown-item js-confirm-action" data-post-url="@Url.Action("NoShow", new { id = r.Id })" data-confirm-title="Marquer absent" data-confirm-message="Marquer ce client absent ?"><i class="bi bi-person-x"></i> Marquer absent</button></li> }@if (item.CanDelete) { <li><hr class="dropdown-divider" /></li><li><button class="dropdown-item text-danger js-confirm-action" data-post-url="@Url.Action("DeleteConfirmed", new { id = r.Id })" data-confirm-title="Supprimer la réservation" data-confirm-message="Supprimer cette réservation ?"><i class="bi bi-trash"></i> Supprimer</button></li> }</ul></div></div></td>
         </tr>
-}
+    }
     </tbody>
 </table>
+</div>

@@ -1,0 +1,62 @@
+@model Web.Models.SejourCheckoutViewModel
+
+@{
+    ViewData["Title"] = "Enregistrer le check-out";
+}
+
+<h1>Enregistrer le check-out</h1>
+
+<h4>@Model.Client - Chambre @Model.Chambre</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Checkout" asp-route-id="@Model.SejourId">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SejourId" />
+            <input type="hidden" asp-for="Client" />
+            <input type="hidden" asp-for="Chambre" />
+
+            <div class="mb-3">
+                <label asp-for="DateSortie" class="form-label"></label>
+                <input asp-for="DateSortie" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
+                <span asp-validation-for="DateSortie" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="NbNuits" class="form-label"></label>
+                <input asp-for="NbNuits" class="form-control" />
+                <span asp-validation-for="NbNuits" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="TarifApplique" class="form-label"></label>
+                <input asp-for="TarifApplique" class="form-control" />
+                <span asp-validation-for="TarifApplique" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Remise" class="form-label"></label>
+                <input asp-for="Remise" class="form-control" />
+                <span asp-validation-for="Remise" class="text-danger"></span>
+            </div>
+
+            <div class="workflow-summary">
+                <div><span>Montant HT</span><strong>@Model.MontantHT.ToString("N0") FCFA</strong></div>
+                <div><span>Taxe</span><strong>@Model.Taxe.ToString("N0") FCFA</strong></div>
+                <div><span>Total TTC</span><strong>@Model.MontantTTC.ToString("N0") FCFA</strong></div>
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-receipt" aria-hidden="true"></i>
+                    Terminer et créer la facture
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-outline-secondary">Retour à la liste</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

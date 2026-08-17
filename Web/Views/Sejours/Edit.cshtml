@@ -1,107 +1,74 @@
 @model GestionHoteliere.Domain.Entities.Sejour
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Modifier le séjour";
 }
 
-<h1>Edit</h1>
+<h1>Modifier le séjour</h1>
 
-<h4>Sejour</h4>
+<h4>Informations du séjour</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ReservationId" class="control-label"></label>
-                <select asp-for="ReservationId" class="form-control" asp-items="ViewBag.ReservationId"></select>
+            <div class="mb-3">
+                <label asp-for="ReservationId" class="form-label"></label>
+                <select asp-for="ReservationId" class="form-select" asp-items="ViewBag.ReservationId">
+                    <option value="">-- Aucun --</option>
+                </select>
                 <span asp-validation-for="ReservationId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ClientId" class="control-label"></label>
-                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+            <div class="mb-3">
+                <label asp-for="ClientId" class="form-label"></label>
+                <select asp-for="ClientId" class="form-select" asp-items="ViewBag.ClientId">
+                    <option value="">-- Sélectionner --</option>
+                </select>
                 <span asp-validation-for="ClientId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ChambreId" class="control-label"></label>
-                <select asp-for="ChambreId" class="form-control" asp-items="ViewBag.ChambreId"></select>
+            <div class="mb-3">
+                <label asp-for="ChambreId" class="form-label"></label>
+                <select asp-for="ChambreId" class="form-select" asp-items="ViewBag.ChambreId">
+                    <option value="">-- Sélectionner --</option>
+                </select>
                 <span asp-validation-for="ChambreId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DateEntree" class="control-label"></label>
-                <input asp-for="DateEntree" class="form-control" />
+            <div class="mb-3">
+                <label asp-for="DateEntree" class="form-label"></label>
+                <input asp-for="DateEntree" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
                 <span asp-validation-for="DateEntree" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DateSortie" class="control-label"></label>
-                <input asp-for="DateSortie" class="form-control" />
+            <div class="mb-3">
+                <label asp-for="DateSortie" class="form-label"></label>
+                <input asp-for="DateSortie" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
                 <span asp-validation-for="DateSortie" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="NbNuits" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="NbNuits" class="form-label"></label>
                 <input asp-for="NbNuits" class="form-control" />
                 <span asp-validation-for="NbNuits" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="TarifApplique" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="TarifApplique" class="form-label"></label>
                 <input asp-for="TarifApplique" class="form-control" />
                 <span asp-validation-for="TarifApplique" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Remise" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Remise" class="form-label"></label>
                 <input asp-for="Remise" class="form-control" />
                 <span asp-validation-for="Remise" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Statut" class="control-label"></label>
-                <select asp-for="Statut" class="form-control"></select>
-                <span asp-validation-for="Statut" class="text-danger"></span>
-            </div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedById" class="control-label"></label>
-                <input asp-for="CreatedById" class="form-control" />
-                <span asp-validation-for="CreatedById" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedAt" class="control-label"></label>
-                <input asp-for="UpdatedAt" class="form-control" />
-                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedById" class="control-label"></label>
-                <input asp-for="UpdatedById" class="form-control" />
-                <span asp-validation-for="UpdatedById" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="DeletedAt" class="control-label"></label>
-                <input asp-for="DeletedAt" class="form-control" />
-                <span asp-validation-for="DeletedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DeletedById" class="control-label"></label>
-                <input asp-for="DeletedById" class="form-control" />
-                <span asp-validation-for="DeletedById" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <!-- Champs de metadonnees supprimes (geres cote serveur) -->
+            <div class="mb-3">
+                <input type="submit" value="Enregistrer les modifications" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-outline-secondary">Retour à la liste</a>
 </div>
 
 @section Scripts {

@@ -18,6 +18,7 @@ namespace Infrastructure.UnitOfWork
         private ISejourRepository? _sejours;
         private IFactureRepository? _factures;
         private IPaiementRepository? _paiements;
+        private IUserRepository? _users;
 
         public UnitOfWork(GestionHoteliereDbContext context)
         {
@@ -45,6 +46,9 @@ namespace Infrastructure.UnitOfWork
 
         public IPaiementRepository Paiements =>
             _paiements ??= new PaiementRepository(_context);
+
+        public IUserRepository Users =>
+            _users ??= new UserRepository(_context);
 
         // Un seul appel valide toutes les ecritures en attente.
         public async Task<int> SaveChangesAsync() =>

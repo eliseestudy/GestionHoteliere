@@ -4,6 +4,7 @@ using Infrastructure.Repositories;
 using Infrastructure.UnitOfWork;
 using Application.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using Web.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,7 @@ var connectionString =
     builder.Configuration.GetConnectionString(
         "GestionHoteliereConnection")
     ?? throw new InvalidOperationException(
-        "La chaîne de connexion GestionHoteliereConnection est introuvable.");
+        "La chaÃ®ne de connexion GestionHoteliereConnection est introuvable.");
 
 builder.Services.AddDbContext<GestionHoteliereDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -27,6 +28,8 @@ builder.Services.AddScoped<ISejourRepository, SejourRepository>();
 builder.Services.AddScoped<IPaiementRepository, PaiementRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IBusinessRulesService, BusinessRulesService>();
+builder.Services.AddScoped<IDocumentNumberService, DocumentNumberService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

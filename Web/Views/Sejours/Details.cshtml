@@ -1,32 +1,32 @@
 @model GestionHoteliere.Domain.Entities.Sejour
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Fiche séjour";
 }
 
-<h1>Details</h1>
+<h1>Fiche séjour</h1>
 
 <div>
-    <h4>Sejour</h4>
+    <h4>Informations du séjour</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Reservation)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Reservation.NumeroReservation)
+            @Html.DisplayFor(model => model.Reservation!.NumeroReservation)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Client)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Client.Nom)
+            @Html.DisplayFor(model => model.Client!.Nom)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Chambre)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Chambre.Numero)
+            @Html.DisplayFor(model => model.Chambre!.Numero)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DateEntree)
@@ -64,57 +64,9 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Statut)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedById)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedById)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedById)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedById)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsDeleted)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsDeleted)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DeletedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DeletedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DeletedById)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DeletedById)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RowVersion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RowVersion)
-        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Modifier</a>
+    <a asp-action="Index" class="btn btn-outline-secondary">Retour à la liste</a>
 </div>

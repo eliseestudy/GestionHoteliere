@@ -8,16 +8,20 @@ namespace GestionHoteliere.Domain.Entities
     {
         [Required]
         [MaxLength(50)]
+        [Display(Name = "N° de chambre")]
         public string Numero { get; set; } = string.Empty;
 
+        [Display(Name = "Étage")]
         public int Etage { get; set; } = 0;
 
         [ForeignKey(nameof(TypeChambre))]
+        [Display(Name = "Type de chambre")]
         public int TypeChambreId { get; set; }
         public TypeChambre? TypeChambre { get; set; }
 
         public ChambreStatut Statut { get; set; } = ChambreStatut.Libre;
 
+        [Display(Name = "Nombre de lits")]
         public int NbLits { get; set; } = 1;
 
         [MaxLength(500)]

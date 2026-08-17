@@ -1,32 +1,41 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using Domain.Enums;
 using GestionHoteliere.Domain.Entities;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Web.Models;
+using Web.Services;
 
 namespace Web.Controllers
 {
     public class PaiementsController : Controller
     {
         private readonly GestionHoteliereDbContext _context;
+        private readonly IBusinessRulesService _rules;
 
-        public PaiementsController(GestionHoteliereDbContext context)
+        public PaiementsController(GestionHoteliereDbContext context, IBusinessRulesService rules)
         {
             _context = context;
+            _rules = rules;
         }
 
-        // GET: Paiements
         public async Task<IActionResult> Index()
         {
-            var gestionHoteliereDbContext = _context.Paiements.Include(p => p.Facture).Include(p => p.User);
-            return View(await gestionHoteliereDbContext.ToListAsync());
+            var paiements = await _context.Paiements
+                .Include(p => p.Facture)
+                .Include(p => p.User)
+                .OrderByDescending(p => p.DatePaiement)
+                .ToListAsync();
+
+            var model = paiements.Select(paiement => new PaiementListItemViewModel
+            {
+                Paiement = paiement,
+                CanRefund = _rules.CanRefundPaiement(paiement)
+            }).ToList();
+
+            return View(model);
         }
 
-        // GET: Paiements/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,33 +55,113 @@ namespace Web.Controllers
             return View(paiement);
         }
 
-        // GET: Paiements/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> CreateForFacture(int factureId)
         {
-            ViewData["FactureId"] = new SelectList(_context.Factures, "Id", "NumeroFacture");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "PasswordHash");
-            return View();
+            var model = await BuildPaymentModel(factureId);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            return PartialView("_PaymentModalForm", model);
         }
 
-        // POST: Paiements/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FactureId,DatePaiement,Montant,Mode,Statut,TransactionReference,UserId,Id,CreatedAt,CreatedById,UpdatedAt,UpdatedById,IsDeleted,DeletedAt,DeletedById,RowVersion")] Paiement paiement)
+        public async Task<IActionResult> CreateForFacture(PaiementContextViewModel model)
         {
-            if (ModelState.IsValid)
+            var facture = await _context.Factures
+                .Include(f => f.Paiements)
+                .FirstOrDefaultAsync(f => f.Id == model.FactureId);
+            if (facture == null)
             {
-                _context.Add(paiement);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            ViewData["FactureId"] = new SelectList(_context.Factures, "Id", "NumeroFacture", paiement.FactureId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "PasswordHash", paiement.UserId);
-            return View(paiement);
+
+            await _rules.RecalculateFactureAsync(facture.Id);
+            await _context.SaveChangesAsync();
+            await _context.Entry(facture).ReloadAsync();
+
+            var solde = Math.Max(0, facture.MontantTTC - facture.MontantPaye);
+            model.NumeroFacture = facture.NumeroFacture;
+            model.SoldeRestant = solde;
+
+            if (!_rules.CanPayFacture(facture))
+            {
+                ModelState.AddModelError(string.Empty, "Cette facture ne peut pas recevoir de paiement.");
+            }
+
+            if (model.Montant <= 0)
+            {
+                ModelState.AddModelError(nameof(model.Montant), "Le montant doit etre positif.");
+            }
+
+            if (model.Montant > solde)
+            {
+                ModelState.AddModelError(nameof(model.Montant), "Le montant ne peut pas depasser le solde restant.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = StatusCodes.Status400BadRequest;
+                return PartialView("_PaymentModalForm", model);
+            }
+
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            _context.Paiements.Add(new Paiement
+            {
+                FactureId = facture.Id,
+                DatePaiement = model.DatePaiement == default ? DateTimeOffset.UtcNow : model.DatePaiement,
+                Montant = model.Montant,
+                Mode = model.Mode,
+                Statut = PaiementStatut.Effectue,
+                TransactionReference = model.TransactionReference,
+                CreatedAt = DateTimeOffset.UtcNow
+            });
+
+            await _context.SaveChangesAsync();
+            await _rules.RecalculateFactureAsync(facture.Id);
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            TempData["Toast.Type"] = "success";
+            TempData["Toast.Message"] = "Paiement enregistre.";
+            return Json(new { success = true, message = "Paiement enregistre." });
         }
 
-        // GET: Paiements/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Refund(int id)
+        {
+            var paiement = await _context.Paiements.FindAsync(id);
+            if (paiement == null)
+            {
+                return NotFound();
+            }
+
+            if (!_rules.CanRefundPaiement(paiement))
+            {
+                SetToast("warning", "Seul un paiement effectue peut etre rembourse.");
+                return RedirectToAction(nameof(Index));
+            }
+
+            paiement.Statut = PaiementStatut.Rembourse;
+            paiement.UpdatedAt = DateTimeOffset.UtcNow;
+            await _context.SaveChangesAsync();
+            await _rules.RecalculateFactureAsync(paiement.FactureId);
+            await _context.SaveChangesAsync();
+
+            SetToast("success", "Paiement rembourse integralement.");
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Create()
+        {
+            SetToast("warning", "Les paiements se creent depuis une facture eligible.");
+            return RedirectToAction(nameof(Index));
+        }
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,54 +169,10 @@ namespace Web.Controllers
                 return NotFound();
             }
 
-            var paiement = await _context.Paiements.FindAsync(id);
-            if (paiement == null)
-            {
-                return NotFound();
-            }
-            ViewData["FactureId"] = new SelectList(_context.Factures, "Id", "NumeroFacture", paiement.FactureId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "PasswordHash", paiement.UserId);
-            return View(paiement);
+            SetToast("warning", "Un paiement enregistre est consultable mais non modifiable.");
+            return RedirectToAction(nameof(Details), new { id });
         }
 
-        // POST: Paiements/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FactureId,DatePaiement,Montant,Mode,Statut,TransactionReference,UserId,Id,CreatedAt,CreatedById,UpdatedAt,UpdatedById,IsDeleted,DeletedAt,DeletedById,RowVersion")] Paiement paiement)
-        {
-            if (id != paiement.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(paiement);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PaiementExists(paiement.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["FactureId"] = new SelectList(_context.Factures, "Id", "NumeroFacture", paiement.FactureId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "PasswordHash", paiement.UserId);
-            return View(paiement);
-        }
-
-        // GET: Paiements/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,36 +180,35 @@ namespace Web.Controllers
                 return NotFound();
             }
 
-            var paiement = await _context.Paiements
-                .Include(p => p.Facture)
-                .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (paiement == null)
-            {
-                return NotFound();
-            }
-
-            return View(paiement);
+            SetToast("warning", "Les paiements ne sont pas supprimables. Utilisez le remboursement total.");
+            return RedirectToAction(nameof(Details), new { id });
         }
 
-        // POST: Paiements/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        private async Task<PaiementContextViewModel?> BuildPaymentModel(int factureId)
         {
-            var paiement = await _context.Paiements.FindAsync(id);
-            if (paiement != null)
+            var facture = await _context.Factures
+                .Include(f => f.Paiements)
+                .FirstOrDefaultAsync(f => f.Id == factureId);
+            if (facture == null)
             {
-                _context.Paiements.Remove(paiement);
+                return null;
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var solde = Math.Max(0, facture.MontantTTC - facture.MontantPaye);
+            return new PaiementContextViewModel
+            {
+                FactureId = facture.Id,
+                NumeroFacture = facture.NumeroFacture,
+                SoldeRestant = solde,
+                Montant = solde,
+                DatePaiement = DateTimeOffset.UtcNow
+            };
         }
 
-        private bool PaiementExists(int id)
+        private void SetToast(string type, string message)
         {
-            return _context.Paiements.Any(e => e.Id == id);
+            TempData["Toast.Type"] = type;
+            TempData["Toast.Message"] = message;
         }
     }
 }

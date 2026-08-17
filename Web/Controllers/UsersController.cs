@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GestionHoteliere.Domain.Entities;
 using Infrastructure.Data;
+using Web.Services;
 
 namespace Web.Controllers
 {
     public class UsersController : Controller
     {
         private readonly GestionHoteliereDbContext _context;
+        private readonly IBusinessRulesService _rules;
 
-        public UsersController(GestionHoteliereDbContext context)
+        public UsersController(GestionHoteliereDbContext context, IBusinessRulesService rules)
         {
             _context = context;
+            _rules = rules;
         }
 
         // GET: Users
@@ -46,7 +49,7 @@ namespace Web.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
-            return View();
+            return View(new User());
         }
 
         // POST: Users/Create
@@ -54,10 +57,19 @@ namespace Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Username,Email,PasswordHash,Role,Prenom,Nom,IsActive,DerniereConnexion,Id,CreatedAt,CreatedById,UpdatedAt,UpdatedById,IsDeleted,DeletedAt,DeletedById,RowVersion")] User user)
+        public async Task<IActionResult> Create([Bind("Username,Email,PasswordHash,Role,Prenom,Nom,IsActive")] User user)
         {
             if (ModelState.IsValid)
             {
+                user.CreatedAt = DateTimeOffset.UtcNow;
+                user.CreatedById = null;
+                user.IsDeleted = false;
+                user.UpdatedAt = null;
+                user.UpdatedById = null;
+                user.DeletedAt = null;
+                user.DeletedById = null;
+                user.DerniereConnexion = null;
+
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,7 +98,7 @@ namespace Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Username,Email,PasswordHash,Role,Prenom,Nom,IsActive,DerniereConnexion,Id,CreatedAt,CreatedById,UpdatedAt,UpdatedById,IsDeleted,DeletedAt,DeletedById,RowVersion")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("Username,Email,PasswordHash,Role,Prenom,Nom,IsActive,Id")] User user)
         {
             if (id != user.Id)
             {
@@ -97,7 +109,22 @@ namespace Web.Controllers
             {
                 try
                 {
-                    _context.Update(user);
+                    var existingUser = await _context.Users.FindAsync(id);
+                    if (existingUser == null)
+                    {
+                        return NotFound();
+                    }
+
+                    existingUser.Username = user.Username;
+                    existingUser.Email = user.Email;
+                    existingUser.PasswordHash = user.PasswordHash;
+                    existingUser.Role = user.Role;
+                    existingUser.Prenom = user.Prenom;
+                    existingUser.Nom = user.Nom;
+                    existingUser.IsActive = user.IsActive;
+                    existingUser.UpdatedAt = DateTimeOffset.UtcNow;
+                    existingUser.UpdatedById = null;
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -142,10 +169,41 @@ namespace Web.Controllers
             var user = await _context.Users.FindAsync(id);
             if (user != null)
             {
-                _context.Users.Remove(user);
+                if (!await _rules.CanDeleteUserAsync(id))
+                {
+                    user.IsActive = false;
+                    user.UpdatedAt = DateTimeOffset.UtcNow;
+                    TempData["Toast.Type"] = "warning";
+                    TempData["Toast.Message"] = "Utilisateur lie a des paiements : il a ete desactive au lieu d'etre supprime.";
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+
+                user.IsDeleted = true;
+                user.DeletedAt = DateTimeOffset.UtcNow;
+                user.DeletedById = null;
             }
 
             await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ToggleActive(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.IsActive = !user.IsActive;
+            user.UpdatedAt = DateTimeOffset.UtcNow;
+            await _context.SaveChangesAsync();
+
+            TempData["Toast.Type"] = "success";
+            TempData["Toast.Message"] = user.IsActive ? "Utilisateur active." : "Utilisateur desactive.";
             return RedirectToAction(nameof(Index));
         }
 

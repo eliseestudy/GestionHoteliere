@@ -1,6 +1,407 @@
 @Api_HostAddress = http://localhost:5047
 
-GET {{Api_HostAddress}}/weatherforecast/
+### Lister les types de chambres
+GET {{Api_HostAddress}}/api/types-chambres
 Accept: application/json
+
+###
+
+### Recuperer un type de chambre par id
+GET {{Api_HostAddress}}/api/types-chambres/1
+Accept: application/json
+
+###
+
+### Creer un type de chambre
+POST {{Api_HostAddress}}/api/types-chambres
+Content-Type: application/json
+Accept: application/json
+
+{
+  "libelle": "Suite familiale",
+  "description": "Chambre spacieuse pour une famille",
+  "capacite": 4,
+  "prixParNuit": 150.00
+}
+
+###
+
+### Modifier un type de chambre
+PUT {{Api_HostAddress}}/api/types-chambres/1
+Content-Type: application/json
+
+{
+  "libelle": "Suite familiale premium",
+  "description": "Chambre spacieuse avec salon",
+  "capacite": 4,
+  "prixParNuit": 175.00
+}
+
+###
+
+### Supprimer un type de chambre
+DELETE {{Api_HostAddress}}/api/types-chambres/1
+
+###
+
+### Lister les chambres
+GET {{Api_HostAddress}}/api/chambres
+Accept: application/json
+
+###
+
+### Recuperer une chambre par id
+GET {{Api_HostAddress}}/api/chambres/1
+Accept: application/json
+
+###
+
+### Creer une chambre
+POST {{Api_HostAddress}}/api/chambres
+Content-Type: application/json
+Accept: application/json
+
+{
+  "numero": "101",
+  "etage": 1,
+  "typeChambreId": 1,
+  "statut": 0,
+  "nbLits": 1,
+  "observations": "Vue jardin"
+}
+
+###
+
+### Modifier une chambre
+PUT {{Api_HostAddress}}/api/chambres/1
+Content-Type: application/json
+
+{
+  "numero": "101",
+  "etage": 1,
+  "typeChambreId": 1,
+  "statut": 3,
+  "nbLits": 1,
+  "observations": "Nettoyage en cours"
+}
+
+###
+
+### Supprimer une chambre
+DELETE {{Api_HostAddress}}/api/chambres/1
+
+###
+
+### Lister les clients
+GET {{Api_HostAddress}}/api/clients
+Accept: application/json
+
+###
+
+### Recuperer un client par id
+GET {{Api_HostAddress}}/api/clients/1
+Accept: application/json
+
+###
+
+### Creer un client
+POST {{Api_HostAddress}}/api/clients
+Content-Type: application/json
+Accept: application/json
+
+{
+  "prenom": "Awa",
+  "nom": "Kouame",
+  "email": "awa.kouame@example.com",
+  "telephone": "+2250102030405",
+  "adresse": "Abidjan",
+  "dateNaissance": "1992-04-18T00:00:00",
+  "identifiantNational": "CI123456"
+}
+
+###
+
+### Modifier un client
+PUT {{Api_HostAddress}}/api/clients/1
+Content-Type: application/json
+
+{
+  "prenom": "Awa",
+  "nom": "Kouame",
+  "email": "awa.kouame@example.com",
+  "telephone": "+2250708091011",
+  "adresse": "Cocody, Abidjan",
+  "dateNaissance": "1992-04-18T00:00:00",
+  "identifiantNational": "CI123456"
+}
+
+###
+
+### Supprimer un client
+DELETE {{Api_HostAddress}}/api/clients/1
+
+###
+
+### Lister les reservations
+GET {{Api_HostAddress}}/api/reservations
+Accept: application/json
+
+###
+
+### Recuperer une reservation par id
+GET {{Api_HostAddress}}/api/reservations/1
+Accept: application/json
+
+###
+
+### Creer une reservation
+POST {{Api_HostAddress}}/api/reservations
+Content-Type: application/json
+Accept: application/json
+
+{
+  "numeroReservation": "RES-2026-0001",
+  "clientId": 1,
+  "chambreId": 1,
+  "typeChambreId": 1,
+  "dateArrivee": "2026-08-20T14:00:00Z",
+  "dateDepart": "2026-08-22T11:00:00Z",
+  "statut": 0,
+  "nombrePersonnes": 2,
+  "montantEstime": 300.00
+}
+
+###
+
+### Modifier une reservation
+PUT {{Api_HostAddress}}/api/reservations/1
+Content-Type: application/json
+
+{
+  "numeroReservation": "RES-2026-0001",
+  "clientId": 1,
+  "chambreId": 1,
+  "typeChambreId": 1,
+  "dateArrivee": "2026-08-21T14:00:00Z",
+  "dateDepart": "2026-08-23T11:00:00Z",
+  "statut": 1,
+  "nombrePersonnes": 2,
+  "montantEstime": 350.00
+}
+
+###
+
+### Supprimer une reservation
+DELETE {{Api_HostAddress}}/api/reservations/1
+
+###
+
+### Lister les sejours
+GET {{Api_HostAddress}}/api/sejours
+Accept: application/json
+
+###
+
+### Recuperer un sejour par id
+GET {{Api_HostAddress}}/api/sejours/1
+Accept: application/json
+
+###
+
+### Creer un sejour
+POST {{Api_HostAddress}}/api/sejours
+Content-Type: application/json
+Accept: application/json
+
+{
+  "reservationId": 1,
+  "clientId": 1,
+  "chambreId": 1,
+  "dateEntree": "2026-08-21T14:00:00Z",
+  "dateSortie": null,
+  "nbNuits": 2,
+  "tarifApplique": 175.00,
+  "remise": 0.00,
+  "statut": 0
+}
+
+###
+
+### Modifier un sejour
+PUT {{Api_HostAddress}}/api/sejours/1
+Content-Type: application/json
+
+{
+  "reservationId": 1,
+  "clientId": 1,
+  "chambreId": 1,
+  "dateEntree": "2026-08-21T14:00:00Z",
+  "dateSortie": "2026-08-23T11:00:00Z",
+  "nbNuits": 2,
+  "tarifApplique": 175.00,
+  "remise": 10.00,
+  "statut": 1
+}
+
+###
+
+### Supprimer un sejour
+DELETE {{Api_HostAddress}}/api/sejours/1
+
+###
+
+### Lister les factures
+GET {{Api_HostAddress}}/api/factures
+Accept: application/json
+
+###
+
+### Recuperer une facture par id
+GET {{Api_HostAddress}}/api/factures/1
+Accept: application/json
+
+###
+
+### Creer une facture
+POST {{Api_HostAddress}}/api/factures
+Content-Type: application/json
+Accept: application/json
+
+{
+  "numeroFacture": "FAC-2026-0001",
+  "sejourId": 1,
+  "clientId": 1,
+  "dateEmission": "2026-08-23T12:00:00Z",
+  "dateEcheance": "2026-09-06T12:00:00Z",
+  "montantHT": 350.00,
+  "taxe": 63.00,
+  "montantTTC": 413.00,
+  "montantPaye": 0.00,
+  "statut": 0
+}
+
+###
+
+### Modifier une facture
+PUT {{Api_HostAddress}}/api/factures/1
+Content-Type: application/json
+
+{
+  "numeroFacture": "FAC-2026-0001",
+  "sejourId": 1,
+  "clientId": 1,
+  "dateEmission": "2026-08-23T12:00:00Z",
+  "dateEcheance": "2026-09-06T12:00:00Z",
+  "montantHT": 360.00,
+  "taxe": 64.80,
+  "montantTTC": 424.80,
+  "montantPaye": 0.00,
+  "statut": 1
+}
+
+###
+
+### Supprimer une facture
+DELETE {{Api_HostAddress}}/api/factures/1
+
+###
+
+### Lister les paiements
+GET {{Api_HostAddress}}/api/paiements
+Accept: application/json
+
+###
+
+### Recuperer un paiement par id
+GET {{Api_HostAddress}}/api/paiements/1
+Accept: application/json
+
+###
+
+### Creer un paiement
+POST {{Api_HostAddress}}/api/paiements
+Content-Type: application/json
+Accept: application/json
+
+{
+  "factureId": 1,
+  "datePaiement": "2026-08-23T12:30:00Z",
+  "montant": 424.80,
+  "mode": 0,
+  "statut": 2,
+  "transactionReference": "CB-20260823-0001",
+  "userId": 1
+}
+
+###
+
+### Modifier un paiement
+PUT {{Api_HostAddress}}/api/paiements/1
+Content-Type: application/json
+
+{
+  "factureId": 1,
+  "datePaiement": "2026-08-23T12:30:00Z",
+  "montant": 424.80,
+  "mode": 4,
+  "statut": 2,
+  "transactionReference": "MM-20260823-0001",
+  "userId": 1
+}
+
+###
+
+### Supprimer un paiement
+DELETE {{Api_HostAddress}}/api/paiements/1
+
+###
+
+### Lister les utilisateurs
+GET {{Api_HostAddress}}/api/users
+Accept: application/json
+
+###
+
+### Recuperer un utilisateur par id
+GET {{Api_HostAddress}}/api/users/1
+Accept: application/json
+
+###
+
+### Creer un utilisateur
+POST {{Api_HostAddress}}/api/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "reception",
+  "email": "reception@example.com",
+  "passwordHash": "hash-a-remplacer",
+  "role": 1,
+  "prenom": "Reception",
+  "nom": "Hotel",
+  "isActive": true
+}
+
+###
+
+### Modifier un utilisateur
+PUT {{Api_HostAddress}}/api/users/1
+Content-Type: application/json
+
+{
+  "username": "reception",
+  "email": "reception@example.com",
+  "passwordHash": "hash-a-remplacer",
+  "role": 1,
+  "prenom": "Reception",
+  "nom": "Principal",
+  "isActive": true
+}
+
+###
+
+### Supprimer un utilisateur
+DELETE {{Api_HostAddress}}/api/users/1
 
 ###

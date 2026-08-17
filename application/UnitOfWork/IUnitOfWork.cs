@@ -12,6 +12,7 @@ namespace Application.UnitOfWork
         ISejourRepository Sejours { get; }
         IFactureRepository Factures { get; }
         IPaiementRepository Paiements { get; }
+        IUserRepository Users { get; }
 
         Task<int> SaveChangesAsync();
     }

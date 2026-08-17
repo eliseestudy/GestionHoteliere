@@ -1,0 +1,57 @@
+@model Web.Models.ReservationCheckInViewModel
+
+@{
+    ViewData["Title"] = "Enregistrer le check-in";
+}
+
+<h1>Enregistrer le check-in</h1>
+
+<h4>@Model.NumeroReservation - @Model.Client</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CheckIn" asp-route-id="@Model.ReservationId">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ReservationId" />
+            <input type="hidden" asp-for="NumeroReservation" />
+            <input type="hidden" asp-for="Client" />
+
+            <div class="mb-3">
+                <label asp-for="ChambreId" class="form-label"></label>
+                <select asp-for="ChambreId" class="form-select" asp-items="ViewBag.ChambreId">
+                    <option value="">-- Sélectionner --</option>
+                </select>
+                <span asp-validation-for="ChambreId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DateEntree" class="form-label"></label>
+                <input asp-for="DateEntree" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
+                <span asp-validation-for="DateEntree" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="TarifApplique" class="form-label"></label>
+                <input asp-for="TarifApplique" class="form-control" />
+                <span asp-validation-for="TarifApplique" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Remise" class="form-label"></label>
+                <input asp-for="Remise" class="form-control" />
+                <span asp-validation-for="Remise" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                    Ouvrir le séjour
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-outline-secondary">Retour à la liste</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

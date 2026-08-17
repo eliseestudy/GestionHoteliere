@@ -1,49 +1,126 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Web</title>
+    <title>@ViewData["Title"] - Gestion Hôtelière</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/lib/datatables-bs5/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="~/lib/datatables-responsive-bs5/css/responsive.bootstrap5.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Web.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom box-shadow app-navbar">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">Gestion Hôtelière</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div id="mainNavbar" class="navbar-collapse collapse">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-area="" asp-controller="Reservations" asp-action="Index">Réservations</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Chambres" asp-action="Index">Chambres</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Clients" asp-action="Index">Clients</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="operationsMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Opérations
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="operationsMenu">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Sejours" asp-action="Index"><i class="bi bi-door-open me-2" aria-hidden="true"></i>Séjours</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Factures" asp-action="Index">Factures</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Paiements" asp-action="Index">Paiements</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="referentielMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Référentiel
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="referentielMenu">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="TypeChambres" asp-action="Index"><i class="bi bi-tags me-2" aria-hidden="true"></i>Types de chambres</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Index"><i class="bi bi-people me-2" aria-hidden="true"></i>Utilisateurs</a></li>
+                            </ul>
                         </li>
                     </ul>
+                    <div class="d-flex gap-2 navbar-actions">
+                        <a asp-area="" asp-controller="Reservations" asp-action="Create" class="btn btn-sm btn-outline-primary"><i class="bi bi-calendar-plus me-1" aria-hidden="true"></i>Nouvelle réservation</a>
+                        <a asp-area="" asp-controller="Clients" asp-action="Create" class="btn btn-sm btn-primary"><i class="bi bi-person-plus me-1" aria-hidden="true"></i>Nouveau client</a>
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container-fluid app-shell">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        @if (TempData["Toast.Message"] is string toastMessage)
+        {
+            var toastType = TempData["Toast.Type"]?.ToString() ?? "info";
+            <div class="toast app-toast text-bg-@toastType border-0" role="status" aria-live="polite" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">@toastMessage</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fermer"></button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="modal fade" id="appConfirmModal" tabindex="-1" aria-labelledby="appConfirmTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="appConfirmTitle">Confirmer l'action</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0 js-confirm-message">Cette action va être appliquée.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <form method="post" class="js-confirm-form">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger js-confirm-submit">Confirmer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalTitle" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content js-payment-modal-content"></div>
+        </div>
+    </div>
+
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2026 - Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2026 - Gestion Hôtelière
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/jquery4-unobtrusive-compat.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/datatables/js/dataTables.min.js"></script>
+    <script src="~/lib/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

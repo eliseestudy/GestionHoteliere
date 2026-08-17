@@ -1,0 +1,1016 @@
+{
+  "info": {
+    "name": "Gestion Hoteliere API",
+    "description": "Collection Postman pour tester les CRUD de l'API Gestion Hoteliere.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5047",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Types chambres",
+      "item": [
+        {
+          "name": "Lister les types de chambres",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/types-chambres",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "types-chambres"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Recuperer un type de chambre",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/types-chambres/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "types-chambres",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Creer un type de chambre",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"libelle\": \"Suite familiale\",\n  \"description\": \"Chambre spacieuse pour une famille\",\n  \"capacite\": 4,\n  \"prixParNuit\": 150.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/types-chambres",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "types-chambres"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Modifier un type de chambre",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"libelle\": \"Suite familiale premium\",\n  \"description\": \"Chambre spacieuse avec salon\",\n  \"capacite\": 4,\n  \"prixParNuit\": 175.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/types-chambres/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "types-chambres",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Supprimer un type de chambre",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/types-chambres/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "types-chambres",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chambres",
+      "item": [
+        {
+          "name": "Lister les chambres",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/chambres",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "chambres"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Recuperer une chambre",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/chambres/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "chambres",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Creer une chambre",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numero\": \"101\",\n  \"etage\": 1,\n  \"typeChambreId\": 1,\n  \"statut\": 0,\n  \"nbLits\": 1,\n  \"observations\": \"Vue jardin\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/chambres",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "chambres"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Modifier une chambre",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numero\": \"101\",\n  \"etage\": 1,\n  \"typeChambreId\": 1,\n  \"statut\": 3,\n  \"nbLits\": 1,\n  \"observations\": \"Nettoyage en cours\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/chambres/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "chambres",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Supprimer une chambre",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/chambres/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "chambres",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Clients",
+      "item": [
+        {
+          "name": "Lister les clients",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/clients",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "clients"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Recuperer un client",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/clients/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "clients",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Creer un client",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prenom\": \"Awa\",\n  \"nom\": \"Kouame\",\n  \"email\": \"awa.kouame@example.com\",\n  \"telephone\": \"+2250102030405\",\n  \"adresse\": \"Abidjan\",\n  \"dateNaissance\": \"1992-04-18T00:00:00\",\n  \"identifiantNational\": \"CI123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clients",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "clients"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Modifier un client",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prenom\": \"Awa\",\n  \"nom\": \"Kouame\",\n  \"email\": \"awa.kouame@example.com\",\n  \"telephone\": \"+2250708091011\",\n  \"adresse\": \"Cocody, Abidjan\",\n  \"dateNaissance\": \"1992-04-18T00:00:00\",\n  \"identifiantNational\": \"CI123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clients/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "clients",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Supprimer un client",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clients/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "clients",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reservations",
+      "item": [
+        {
+          "name": "Lister les reservations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reservations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "reservations"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Recuperer une reservation",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reservations/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "reservations",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Creer une reservation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroReservation\": \"RES-2026-0001\",\n  \"clientId\": 1,\n  \"chambreId\": 1,\n  \"typeChambreId\": 1,\n  \"dateArrivee\": \"2026-08-20T14:00:00Z\",\n  \"dateDepart\": \"2026-08-22T11:00:00Z\",\n  \"statut\": 0,\n  \"nombrePersonnes\": 2,\n  \"montantEstime\": 300.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reservations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "reservations"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Modifier une reservation",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroReservation\": \"RES-2026-0001\",\n  \"clientId\": 1,\n  \"chambreId\": 1,\n  \"typeChambreId\": 1,\n  \"dateArrivee\": \"2026-08-21T14:00:00Z\",\n  \"dateDepart\": \"2026-08-23T11:00:00Z\",\n  \"statut\": 1,\n  \"nombrePersonnes\": 2,\n  \"montantEstime\": 350.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reservations/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "reservations",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Supprimer une reservation",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/reservations/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "reservations",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sejours",
+      "item": [
+        {
+          "name": "Lister les sejours",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sejours",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sejours"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Recuperer un sejour",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sejours/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sejours",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Creer un sejour",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reservationId\": 1,\n  \"clientId\": 1,\n  \"chambreId\": 1,\n  \"dateEntree\": \"2026-08-21T14:00:00Z\",\n  \"dateSortie\": null,\n  \"nbNuits\": 2,\n  \"tarifApplique\": 175.00,\n  \"remise\": 0.00,\n  \"statut\": 0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/sejours",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sejours"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Modifier un sejour",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reservationId\": 1,\n  \"clientId\": 1,\n  \"chambreId\": 1,\n  \"dateEntree\": \"2026-08-21T14:00:00Z\",\n  \"dateSortie\": \"2026-08-23T11:00:00Z\",\n  \"nbNuits\": 2,\n  \"tarifApplique\": 175.00,\n  \"remise\": 10.00,\n  \"statut\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/sejours/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sejours",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Supprimer un sejour",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/sejours/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sejours",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Factures",
+      "item": [
+        {
+          "name": "Lister les factures",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/factures",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "factures"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Recuperer une facture",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/factures/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "factures",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Creer une facture",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroFacture\": \"FAC-2026-0001\",\n  \"sejourId\": 1,\n  \"clientId\": 1,\n  \"dateEmission\": \"2026-08-23T12:00:00Z\",\n  \"dateEcheance\": \"2026-09-06T12:00:00Z\",\n  \"montantHT\": 350.00,\n  \"taxe\": 63.00,\n  \"montantTTC\": 413.00,\n  \"montantPaye\": 0.00,\n  \"statut\": 0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/factures",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "factures"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Modifier une facture",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroFacture\": \"FAC-2026-0001\",\n  \"sejourId\": 1,\n  \"clientId\": 1,\n  \"dateEmission\": \"2026-08-23T12:00:00Z\",\n  \"dateEcheance\": \"2026-09-06T12:00:00Z\",\n  \"montantHT\": 360.00,\n  \"taxe\": 64.80,\n  \"montantTTC\": 424.80,\n  \"montantPaye\": 0.00,\n  \"statut\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/factures/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "factures",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Supprimer une facture",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/factures/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "factures",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Paiements",
+      "item": [
+        {
+          "name": "Lister les paiements",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/paiements",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "paiements"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Recuperer un paiement",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/paiements/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "paiements",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Creer un paiement",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"factureId\": 1,\n  \"datePaiement\": \"2026-08-23T12:30:00Z\",\n  \"montant\": 424.80,\n  \"mode\": 0,\n  \"statut\": 2,\n  \"transactionReference\": \"CB-20260823-0001\",\n  \"userId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/paiements",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "paiements"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Modifier un paiement",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"factureId\": 1,\n  \"datePaiement\": \"2026-08-23T12:30:00Z\",\n  \"montant\": 424.80,\n  \"mode\": 4,\n  \"statut\": 2,\n  \"transactionReference\": \"MM-20260823-0001\",\n  \"userId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/paiements/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "paiements",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Supprimer un paiement",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/paiements/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "paiements",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Lister les utilisateurs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Recuperer un utilisateur",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Creer un utilisateur",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"reception\",\n  \"email\": \"reception@example.com\",\n  \"passwordHash\": \"hash-a-remplacer\",\n  \"role\": 1,\n  \"prenom\": \"Reception\",\n  \"nom\": \"Hotel\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Modifier un utilisateur",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"reception\",\n  \"email\": \"reception@example.com\",\n  \"passwordHash\": \"hash-a-remplacer\",\n  \"role\": 1,\n  \"prenom\": \"Reception\",\n  \"nom\": \"Principal\",\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Supprimer un utilisateur",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

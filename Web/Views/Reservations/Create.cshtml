@@ -1,110 +1,45 @@
-@model GestionHoteliere.Domain.Entities.Reservation
+@model Web.Models.ReservationFormViewModel
+@using System.Globalization
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Nouvelle réservation";
+    var types = ViewData["TypeChambreOptions"] as IEnumerable<TypeChambreOptionViewModel> ?? [];
+    var rooms = ViewData["ChambreOptions"] as IEnumerable<ChambreOptionViewModel> ?? [];
 }
 
-<h1>Create</h1>
-
-<h4>Reservation</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NumeroReservation" class="control-label"></label>
-                <input asp-for="NumeroReservation" class="form-control" />
-                <span asp-validation-for="NumeroReservation" class="text-danger"></span>
+<div class="page-heading">
+    <div><span class="page-eyebrow">Réservations</span><h1>Nouvelle réservation</h1><p>Le numéro sera généré automatiquement lors de l’enregistrement.</p></div>
+</div>
+<form asp-action="Create" class="js-reservation-form">
+    <div class="form-surface">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+        <div class="form-grid">
+            <div><label asp-for="ClientId" class="form-label"></label><select asp-for="ClientId" class="form-select" asp-items="ViewBag.ClientId"><option value="">Sélectionner un client</option></select><span asp-validation-for="ClientId" class="text-danger"></span></div>
+            <div><label asp-for="ChambreId" class="form-label"></label><select asp-for="ChambreId" class="form-select js-reservation-room"><option value="">À assigner ultérieurement</option>@foreach (var room in rooms) { <option value="@room.Id" data-type-id="@room.TypeChambreId">Chambre @room.Numero</option> }</select><span asp-validation-for="ChambreId" class="text-danger"></span></div>
+            <div>
+                <label asp-for="TypeChambreId" class="form-label"></label>
+                <select asp-for="TypeChambreId" class="form-select js-room-type-select">
+                    <option value="">Sélectionner un type</option>
+                    @foreach (var type in types)
+                    {
+                        if (Model.TypeChambreId == type.Id)
+                        { <option value="@type.Id" data-price="@type.PrixParNuit.ToString(CultureInfo.InvariantCulture)" selected>@type.Libelle</option> }
+                        else
+                        { <option value="@type.Id" data-price="@type.PrixParNuit.ToString(CultureInfo.InvariantCulture)">@type.Libelle</option> }
+                    }
+                </select>
+                <span asp-validation-for="TypeChambreId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ClientId" class="control-label"></label>
-                <select asp-for="ClientId" class ="form-control" asp-items="ViewBag.ClientId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ChambreId" class="control-label"></label>
-                <select asp-for="ChambreId" class ="form-control" asp-items="ViewBag.ChambreId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="TypeChambreId" class="control-label"></label>
-                <select asp-for="TypeChambreId" class ="form-control" asp-items="ViewBag.TypeChambreId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateCreation" class="control-label"></label>
-                <input asp-for="DateCreation" class="form-control" />
-                <span asp-validation-for="DateCreation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateArrivee" class="control-label"></label>
-                <input asp-for="DateArrivee" class="form-control" />
-                <span asp-validation-for="DateArrivee" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateDepart" class="control-label"></label>
-                <input asp-for="DateDepart" class="form-control" />
-                <span asp-validation-for="DateDepart" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Statut" class="control-label"></label>
-                <select asp-for="Statut" class="form-control"></select>
-                <span asp-validation-for="Statut" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NombrePersonnes" class="control-label"></label>
-                <input asp-for="NombrePersonnes" class="form-control" />
-                <span asp-validation-for="NombrePersonnes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MontantEstime" class="control-label"></label>
-                <input asp-for="MontantEstime" class="form-control" />
-                <span asp-validation-for="MontantEstime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedById" class="control-label"></label>
-                <input asp-for="CreatedById" class="form-control" />
-                <span asp-validation-for="CreatedById" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedAt" class="control-label"></label>
-                <input asp-for="UpdatedAt" class="form-control" />
-                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedById" class="control-label"></label>
-                <input asp-for="UpdatedById" class="form-control" />
-                <span asp-validation-for="UpdatedById" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="DeletedAt" class="control-label"></label>
-                <input asp-for="DeletedAt" class="form-control" />
-                <span asp-validation-for="DeletedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DeletedById" class="control-label"></label>
-                <input asp-for="DeletedById" class="form-control" />
-                <span asp-validation-for="DeletedById" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+            <div><label asp-for="NombrePersonnes" class="form-label"></label><input asp-for="NombrePersonnes" class="form-control" type="number" min="1" /><span asp-validation-for="NombrePersonnes" class="text-danger"></span></div>
+            <div><label asp-for="DateArrivee" class="form-label"></label><input asp-for="DateArrivee" class="form-control js-arrival-date" type="date" asp-format="{0:yyyy-MM-dd}" /><span asp-validation-for="DateArrivee" class="text-danger"></span></div>
+            <div><label asp-for="DateDepart" class="form-label"></label><input asp-for="DateDepart" class="form-control js-departure-date" type="date" asp-format="{0:yyyy-MM-dd}" /><span asp-validation-for="DateDepart" class="text-danger"></span></div>
+        </div>
+        <div class="calculation-summary" aria-live="polite">
+            <div><span>Durée</span><strong><span class="js-estimate-nights">@Model.NombreNuits</span> nuit(s)</strong></div>
+            <div><span>Prix par nuit</span><strong><span class="js-estimate-price">@Model.PrixParNuit.ToString("N0")</span> FCFA</strong></div>
+            <div><span>Montant estimé</span><strong><span class="js-estimate-total">@Model.MontantEstime.ToString("N0")</span> FCFA</strong></div>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    <div class="form-actions"><a asp-action="Index" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Retour</a><button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Enregistrer la réservation</button></div>
+</form>
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } }
