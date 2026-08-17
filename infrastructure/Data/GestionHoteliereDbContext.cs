@@ -36,7 +36,10 @@ namespace Infrastructure.Data
             Set<Paiement>();
 
         public DbSet<User> Users =>
-            Set<User>();
+        Set<User>();
+
+        public DbSet<DocumentNumberCounter> DocumentNumberCounters =>
+        Set<DocumentNumberCounter>();
 
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
@@ -51,6 +54,7 @@ namespace Infrastructure.Data
             ConfigurerFacture(modelBuilder);
             ConfigurerUser(modelBuilder);
             ConfigurerPaiement(modelBuilder);
+            ConfigurerDocumentNumberCounter(modelBuilder);
             ConfigurerSuppressionLogique(modelBuilder);
         }
 
@@ -272,7 +276,7 @@ namespace Infrastructure.Data
         {
             modelBuilder.Entity<User>(entity =>
             {
-                entity.ToTable("Users");
+                entity.ToTable("User");
 
                 entity.HasKey(x => x.Id);
 
@@ -289,6 +293,16 @@ namespace Infrastructure.Data
 
                 entity.HasIndex(x => x.Username)
                     .IsUnique();
+            });
+        }
+
+        private static void ConfigurerDocumentNumberCounter(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<DocumentNumberCounter>(entity =>
+            {
+                entity.ToTable("DocumentNumberCounters");
+                entity.HasKey(x => new { x.DocumentType, x.Year });
+                entity.Property(x => x.DocumentType).HasMaxLength(20);
             });
         }
 

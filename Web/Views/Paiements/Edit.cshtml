@@ -1,0 +1,69 @@
+@model GestionHoteliere.Domain.Entities.Paiement
+
+@{
+    ViewData["Title"] = "Modifier le paiement";
+}
+
+<h1>Modifier le paiement</h1>
+
+<h4>Informations du paiement</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="FactureId" class="form-label"></label>
+                <select asp-for="FactureId" class="form-select" asp-items="ViewBag.FactureId">
+                    <option value="">-- Sélectionner --</option>
+                </select>
+                <span asp-validation-for="FactureId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DatePaiement" class="form-label"></label>
+                <input asp-for="DatePaiement" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
+                <span asp-validation-for="DatePaiement" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Montant" class="form-label"></label>
+                <input asp-for="Montant" class="form-control" />
+                <span asp-validation-for="Montant" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Mode" class="form-label"></label>
+                <select asp-for="Mode" class="form-select" asp-items="Html.GetEnumSelectList<ModePaiement>()"></select>
+                <span asp-validation-for="Mode" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Statut" class="form-label"></label>
+                <select asp-for="Statut" class="form-select" asp-items="Html.GetEnumSelectList<PaiementStatut>()"></select>
+                <span asp-validation-for="Statut" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="TransactionReference" class="form-label"></label>
+                <input asp-for="TransactionReference" class="form-control" />
+                <span asp-validation-for="TransactionReference" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="UserId" class="form-label"></label>
+                <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId">
+                    <option value="">-- Aucun --</option>
+                </select>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <!-- Champs de métadonnées supprimés (gérés côté serveur) -->
+            <div class="mb-3">
+                <input type="submit" value="Enregistrer les modifications" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-outline-secondary">Retour à la liste</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

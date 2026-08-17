@@ -159,6 +159,23 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Clients", (string)null);
                 });
 
+            modelBuilder.Entity("GestionHoteliere.Domain.Entities.DocumentNumberCounter", b =>
+                {
+                    b.Property<string>("DocumentType")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NextValue")
+                        .HasColumnType("int");
+
+                    b.HasKey("DocumentType", "Year");
+
+                    b.ToTable("DocumentNumberCounters", (string)null);
+                });
+
             modelBuilder.Entity("GestionHoteliere.Domain.Entities.Facture", b =>
                 {
                     b.Property<int>("Id")
@@ -587,7 +604,10 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("GestionHoteliere.Domain.Entities.Chambre", b =>
@@ -611,7 +631,8 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasOne("GestionHoteliere.Domain.Entities.Sejour", "Sejour")
                         .WithMany()
-                        .HasForeignKey("SejourId");
+                        .HasForeignKey("SejourId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Client");
 
@@ -628,7 +649,8 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasOne("GestionHoteliere.Domain.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Facture");
 

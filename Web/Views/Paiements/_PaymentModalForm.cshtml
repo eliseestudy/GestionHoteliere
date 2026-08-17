@@ -1,0 +1,48 @@
+@model Web.Models.PaiementContextViewModel
+
+<form asp-controller="Paiements" asp-action="CreateForFacture" method="post" class="js-payment-form">
+    <div class="modal-header">
+        <h1 class="modal-title fs-5" id="paymentModalTitle">Enregistrer un paiement</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+    </div>
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="FactureId" />
+        <input type="hidden" asp-for="NumeroFacture" />
+        <input type="hidden" asp-for="SoldeRestant" />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="alert alert-info py-2">
+            Facture @Model.NumeroFacture - solde restant : <strong>@Model.SoldeRestant.ToString("N0") FCFA</strong>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="DatePaiement" class="form-label"></label>
+            <input asp-for="DatePaiement" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
+            <span asp-validation-for="DatePaiement" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Montant" class="form-label"></label>
+            <input asp-for="Montant" class="form-control" />
+            <span asp-validation-for="Montant" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Mode" class="form-label"></label>
+            <select asp-for="Mode" class="form-select" asp-items="Html.GetEnumSelectList<ModePaiement>()"></select>
+            <span asp-validation-for="Mode" class="text-danger"></span>
+        </div>
+        <div class="mb-0">
+            <label asp-for="TransactionReference" class="form-label"></label>
+            <input asp-for="TransactionReference" class="form-control" />
+            <span asp-validation-for="TransactionReference" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-credit-card" aria-hidden="true"></i>
+            Enregistrer
+        </button>
+    </div>
+</form>

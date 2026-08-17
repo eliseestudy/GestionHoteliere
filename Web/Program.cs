@@ -1,7 +1,10 @@
 using Application.Repositories;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
+using Infrastructure.UnitOfWork;
+using Application.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using Web.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,20 +13,23 @@ var connectionString =
     builder.Configuration.GetConnectionString(
         "GestionHoteliereConnection")
     ?? throw new InvalidOperationException(
-        "La chaîne de connexion GestionHoteliereConnection est introuvable.");
+        "La chaÃ®ne de connexion GestionHoteliereConnection est introuvable.");
 
 builder.Services.AddDbContext<GestionHoteliereDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped(typeof(ITypeChambreRepository), typeof(TypeChambreRepository));
-builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
-builder.Services.AddScoped(typeof(IChambreRepository), typeof(ChambreRepository));
-builder.Services.AddScoped(typeof(IReservationRepository), typeof(ReservationRepository));
-builder.Services.AddScoped(typeof(IFactureRepository), typeof(FactureRepository));
-builder.Services.AddScoped(typeof(ISejourRepository), typeof(SejourRepository));
-builder.Services.AddScoped(typeof(IPaiementRepository), typeof(PaiementRepository));
-builder.Services.AddScoped(typeof(IClientRepository), typeof(ClientRepository));
+builder.Services.AddScoped<ITypeChambreRepository, TypeChambreRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IChambreRepository, ChambreRepository>();
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+builder.Services.AddScoped<IFactureRepository, FactureRepository>();
+builder.Services.AddScoped<ISejourRepository, SejourRepository>();
+builder.Services.AddScoped<IPaiementRepository, PaiementRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IBusinessRulesService, BusinessRulesService>();
+builder.Services.AddScoped<IDocumentNumberService, DocumentNumberService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

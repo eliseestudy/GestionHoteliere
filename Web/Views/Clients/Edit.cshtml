@@ -1,0 +1,65 @@
+@model GestionHoteliere.Domain.Entities.Client
+
+@{
+    ViewData["Title"] = "Modifier le client";
+}
+
+<h1>Modifier le client</h1>
+
+<h4>Identité et coordonnées</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="Prenom" class="form-label"></label>
+                <input asp-for="Prenom" class="form-control" />
+                <span asp-validation-for="Prenom" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Nom" class="form-label"></label>
+                <input asp-for="Nom" class="form-control" />
+                <span asp-validation-for="Nom" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Telephone" class="form-label"></label>
+                <input asp-for="Telephone" class="form-control" />
+                <span asp-validation-for="Telephone" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Adresse" class="form-label"></label>
+                <textarea asp-for="Adresse" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Adresse" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DateNaissance" class="form-label"></label>
+                <input asp-for="DateNaissance" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
+                <span asp-validation-for="DateNaissance" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="IdentifiantNational" class="form-label"></label>
+                <input asp-for="IdentifiantNational" class="form-control" />
+                <span asp-validation-for="IdentifiantNational" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <!-- Champs de métadonnées supprimés de la vue. Ils sont gérés côté serveur. -->
+            <div class="mb-3">
+                <input type="submit" value="Enregistrer les modifications" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-outline-secondary">Retour à la liste</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

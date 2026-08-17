@@ -1,0 +1,58 @@
+@model GestionHoteliere.Domain.Entities.Chambre
+
+@{
+    ViewData["Title"] = "Supprimer une chambre";
+}
+
+<h1>Supprimer une chambre</h1>
+
+<h3>Confirmez la suppression de cet element.</h3>
+<div>
+    <h4>Informations de la chambre</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Numero)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Numero)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Etage)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Etage)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TypeChambre)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TypeChambre!.Libelle)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Statut)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Statut)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NbLits)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NbLits)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Observations)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Observations)
+        </dd>
+        <!-- Métadonnées masquées -->
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Confirmer la suppression" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-outline-secondary">Retour à la liste</a>
+    </form>
+</div>

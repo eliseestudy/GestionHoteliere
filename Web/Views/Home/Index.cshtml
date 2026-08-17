@@ -1,8 +1,225 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model HomeDashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="dashboard-page">
+    <div class="dashboard-header">
+        <div>
+            <p class="dashboard-eyebrow">Tableau de bord</p>
+            <h1>Vue d’ensemble de l’hôtel</h1>
+            <span class="text-muted">Dernière mise à jour : @Model.LastUpdated.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</span>
+        </div>
+        <div class="dashboard-header-actions">
+            <div class="input-group dashboard-search">
+                <span class="input-group-text">Rechercher</span>
+                <input type="search" class="form-control js-dashboard-filter" placeholder="Client, réservation, menu..." aria-label="Recherche dans le tableau de bord">
+            </div>
+            <a asp-controller="Reservations" asp-action="Create" class="btn btn-primary"><i class="bi bi-calendar-plus me-2" aria-hidden="true"></i>Nouvelle réservation</a>
+        </div>
+    </div>
+
+    <div class="row g-3 dashboard-kpis">
+        <div class="col-12 col-md-6 col-xl-3">
+            <article class="dashboard-card kpi-card">
+                <span class="kpi-label">Taux d’occupation</span>
+                <div class="kpi-value"><span class="js-kpi-number" data-target="@Model.TauxOccupation">0</span>%</div>
+                <p>@Model.ChambresOccupees chambre(s) occupée(s) sur @Model.TotalChambres</p>
+            </article>
+        </div>
+        <div class="col-12 col-md-6 col-xl-3">
+            <article class="dashboard-card kpi-card kpi-card-success">
+                <span class="kpi-label">Chambres libres</span>
+                <div class="kpi-value js-kpi-number" data-target="@Model.ChambresLibres">0</div>
+                <p>@Model.ChambresMaintenance chambre(s) en maintenance ou hors service</p>
+            </article>
+        </div>
+        <div class="col-12 col-md-6 col-xl-3">
+            <article class="dashboard-card kpi-card kpi-card-warning">
+                <span class="kpi-label">Réservations actives</span>
+                <div class="kpi-value js-kpi-number" data-target="@Model.ReservationsActives">0</div>
+                <p>@Model.ArriveesDuJour arrivée(s) et @Model.DepartsDuJour départ(s) aujourd’hui</p>
+            </article>
+        </div>
+        <div class="col-12 col-md-6 col-xl-3">
+            <article class="dashboard-card kpi-card kpi-card-info">
+                <span class="kpi-label">Revenus du mois</span>
+                <div class="kpi-value">@Model.RevenusDuMois.ToString("N0") FCFA</div>
+                <p>@Model.FacturesEnAttente facture(s) à suivre</p>
+            </article>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-12 col-xl-8">
+            <section class="dashboard-panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Réservations récentes</h2>
+                        <span class="text-muted">Dernières opérations enregistrées</span>
+                    </div>
+                    <a asp-controller="Reservations" asp-action="Index" class="btn btn-sm btn-outline-primary"><i class="bi bi-arrow-right me-1" aria-hidden="true"></i>Tout voir</a>
+                </div>
+
+                <div class="table-responsive dashboard-table">
+                    <table id="dashboardReservationsTable" class="table align-middle mb-0 js-data-table" data-page-length="5" data-order='[[3,"asc"]]'>
+                        <thead>
+                            <tr>
+                                <th>Réservation</th>
+                                <th>Client</th>
+                                <th>Chambre</th>
+                                <th>Séjour</th>
+                                <th class="text-end">Montant</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.ReservationsRecentes.Any())
+                            {
+                                foreach (var reservation in Model.ReservationsRecentes)
+                                {
+                                    <tr class="dashboard-searchable" data-search="@($"{reservation.Numero} {reservation.Client} {reservation.Chambre} {reservation.Statut}")">
+                                        <td>
+                                            <a asp-controller="Reservations" asp-action="Details" asp-route-id="@reservation.Id" class="fw-semibold text-decoration-none">@reservation.Numero</a>
+                                            <span class="dashboard-badge">@reservation.Statut</span>
+                                        </td>
+                                        <td>@reservation.Client</td>
+                                        <td>@reservation.Chambre</td>
+                                        <td>@reservation.DateArrivee.ToString("dd/MM") - @reservation.DateDepart.ToString("dd/MM")</td>
+                                        <td class="text-end">@reservation.MontantEstime.ToString("N0") FCFA</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">Aucune réservation récente.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-12 col-xl-4">
+            <section class="dashboard-panel h-100">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Disponibilité</h2>
+                        <span class="text-muted">@Model.TotalChambres chambre(s) au total</span>
+                    </div>
+                </div>
+
+                <div class="room-status-list">
+                    @if (Model.StatutsChambres.Any())
+                    {
+                        foreach (var item in Model.StatutsChambres)
+                        {
+                            <div class="room-status-item dashboard-searchable" data-search="@item.Libelle">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="room-status-label">
+                                        <span class="room-status-dot @item.ClasseCss"></span>
+                                        @item.Libelle
+                                    </span>
+                                    <strong>@item.Total</strong>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar @item.ClasseCss" role="progressbar" style="width: @(item.Pourcentage.ToString(System.Globalization.CultureInfo.InvariantCulture))%" aria-valuenow="@item.Pourcentage" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">Aucune chambre enregistrée pour le moment.</p>
+                    }
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-1">
+        <div class="col-12 col-lg-4">
+            <section class="dashboard-panel h-100">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Aujourd’hui</h2>
+                        <span class="text-muted">Réception et séjours</span>
+                    </div>
+                </div>
+                <div class="today-grid">
+                    <a asp-controller="Reservations" asp-action="Index" class="today-tile dashboard-searchable" data-search="arrivees reservations">
+                        <span>Arrivées</span>
+                        <strong>@Model.ArriveesDuJour</strong>
+                    </a>
+                    <a asp-controller="Reservations" asp-action="Index" class="today-tile dashboard-searchable" data-search="departs reservations">
+                        <span>Départs</span>
+                        <strong>@Model.DepartsDuJour</strong>
+                    </a>
+                    <a asp-controller="Sejours" asp-action="Index" class="today-tile dashboard-searchable" data-search="sejours">
+                        <span>Séjours</span>
+                        <strong>@Model.SejoursEnCours</strong>
+                    </a>
+                    <a asp-controller="Clients" asp-action="Index" class="today-tile dashboard-searchable" data-search="clients">
+                        <span>Clients</span>
+                        <strong>@Model.ClientsTotal</strong>
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-12 col-lg-8">
+            <section class="dashboard-panel h-100">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Accès rapide</h2>
+                        <span class="text-muted">Raccourcis opérationnels</span>
+                    </div>
+                </div>
+                <div class="quick-access-grid">
+                    <a asp-controller="Reservations" asp-action="Index" class="quick-access-item dashboard-searchable" data-search="reservations reservation creer">
+                        <span class="quick-access-code"><i class="bi bi-calendar-check" aria-hidden="true"></i></span>
+                        <strong>Réservations</strong>
+                        <small>Planning, statuts, nouvelles demandes</small>
+                    </a>
+                    <a asp-controller="Chambres" asp-action="Index" class="quick-access-item dashboard-searchable" data-search="chambres chambre disponibilite">
+                        <span class="quick-access-code"><i class="bi bi-door-closed" aria-hidden="true"></i></span>
+                        <strong>Chambres</strong>
+                        <small>Occupation, étages, maintenance</small>
+                    </a>
+                    <a asp-controller="Clients" asp-action="Index" class="quick-access-item dashboard-searchable" data-search="clients client fiche">
+                        <span class="quick-access-code"><i class="bi bi-person-vcard" aria-hidden="true"></i></span>
+                        <strong>Clients</strong>
+                        <small>Fiches, contacts, historique</small>
+                    </a>
+                    <a asp-controller="Sejours" asp-action="Index" class="quick-access-item dashboard-searchable" data-search="sejours arrivees departs">
+                        <span class="quick-access-code"><i class="bi bi-door-open" aria-hidden="true"></i></span>
+                        <strong>Séjours</strong>
+                        <small>Entrées, sorties, nuits</small>
+                    </a>
+                    <a asp-controller="Factures" asp-action="Index" class="quick-access-item dashboard-searchable" data-search="factures facture revenus">
+                        <span class="quick-access-code"><i class="bi bi-receipt" aria-hidden="true"></i></span>
+                        <strong>Factures</strong>
+                        <small>Émission, suivi, reste à payer</small>
+                    </a>
+                    <a asp-controller="Paiements" asp-action="Index" class="quick-access-item dashboard-searchable" data-search="paiements paiement caisse">
+                        <span class="quick-access-code"><i class="bi bi-credit-card" aria-hidden="true"></i></span>
+                        <strong>Paiements</strong>
+                        <small>Encaissements et modes de paiement</small>
+                    </a>
+                    <a asp-controller="TypeChambres" asp-action="Index" class="quick-access-item dashboard-searchable" data-search="types chambres tarifs capacite">
+                        <span class="quick-access-code"><i class="bi bi-tags" aria-hidden="true"></i></span>
+                        <strong>Types de chambres</strong>
+                        <small>Tarifs, capacités, catégories</small>
+                    </a>
+                    <a asp-controller="Users" asp-action="Index" class="quick-access-item dashboard-searchable" data-search="utilisateurs users roles">
+                        <span class="quick-access-code"><i class="bi bi-people" aria-hidden="true"></i></span>
+                        <strong>Utilisateurs</strong>
+                        <small>Comptes et rôles équipe</small>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>

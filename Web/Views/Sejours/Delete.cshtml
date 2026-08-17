@@ -1,0 +1,75 @@
+@model GestionHoteliere.Domain.Entities.Sejour
+
+@{
+    ViewData["Title"] = "Supprimer un séjour";
+}
+
+<h1>Supprimer un séjour</h1>
+
+<h3>Confirmez la suppression de cet element.</h3>
+<div>
+    <h4>Informations du séjour</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Reservation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Reservation!.NumeroReservation)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Client)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Client!.Nom)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Chambre)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Chambre!.Numero)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateEntree)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateEntree)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateSortie)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateSortie)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NbNuits)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NbNuits)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TarifApplique)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TarifApplique)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Remise)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Remise)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Statut)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Statut)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Confirmer la suppression" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-outline-secondary">Retour à la liste</a>
+    </form>
+</div>

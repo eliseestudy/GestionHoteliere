@@ -1,23 +1,32 @@
+using Application.UnitOfWork;
+using Infrastructure.Data;
+using Infrastructure.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var connectionString =
+    builder.Configuration.GetConnectionString("GestionHoteliereConnection")
+    ?? throw new InvalidOperationException(
+        "La chaîne de connexion GestionHoteliereConnection est introuvable.");
+
+builder.Services.AddDbContext<GestionHoteliereDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

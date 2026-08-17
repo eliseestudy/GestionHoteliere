@@ -1,0 +1,14 @@
+@model Web.Models.ChambreFormViewModel
+@{ ViewData["Title"] = "Nouvelle chambre"; var types = ViewData["TypeChambreOptions"] as IEnumerable<TypeChambreOptionViewModel> ?? []; }
+<div class="page-heading"><div><span class="page-eyebrow">Chambres</span><h1>Nouvelle chambre</h1></div></div>
+<form asp-action="Create" class="js-room-form">
+    <div class="form-surface"><div asp-validation-summary="ModelOnly" class="alert alert-danger"></div><div class="form-grid">
+        <div><label asp-for="Numero" class="form-label"></label><input asp-for="Numero" class="form-control" /><span asp-validation-for="Numero" class="text-danger"></span></div>
+        <div><label asp-for="Etage" class="form-label"></label><input asp-for="Etage" class="form-control" type="number" /><span asp-validation-for="Etage" class="text-danger"></span></div>
+        <div><label asp-for="TypeChambreId" class="form-label"></label><select asp-for="TypeChambreId" class="form-select js-room-capacity-source"><option value="">Sélectionner un type</option>@foreach (var type in types) { <option value="@type.Id" data-capacity="@type.Capacite">@type.Libelle</option> }</select><span asp-validation-for="TypeChambreId" class="text-danger"></span></div>
+        <div><label asp-for="NbLits" class="form-label"></label><input asp-for="NbLits" class="form-control js-bed-count" type="number" min="1" /><span asp-validation-for="NbLits" class="text-danger"></span></div>
+        <div class="form-grid-full"><label asp-for="Observations" class="form-label"></label><textarea asp-for="Observations" class="form-control" rows="3"></textarea><span asp-validation-for="Observations" class="text-danger"></span></div>
+    </div></div>
+    <div class="form-actions"><a asp-action="Index" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Retour</a><button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Ajouter la chambre</button></div>
+</form>
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } }

@@ -1,0 +1,14 @@
+@model Web.Models.FactureFormViewModel
+@{ ViewData["Title"] = "Facture hors séjour"; }
+<div class="page-heading"><div><span class="page-eyebrow">Factures</span><h1>Facture hors séjour</h1><p>Le numéro sera généré automatiquement.</p></div></div>
+<form asp-action="Create" class="js-invoice-form">
+    <div class="form-surface"><div asp-validation-summary="ModelOnly" class="alert alert-danger"></div><div class="form-grid">
+        <div><label asp-for="ClientId" class="form-label"></label><select asp-for="ClientId" class="form-select" asp-items="ViewBag.ClientId"><option value="">Sélectionner un client</option></select><span asp-validation-for="ClientId" class="text-danger"></span></div>
+        <div><label asp-for="DateEmission" class="form-label"></label><input asp-for="DateEmission" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" /><span asp-validation-for="DateEmission" class="text-danger"></span></div>
+        <div><label asp-for="DateEcheance" class="form-label"></label><input asp-for="DateEcheance" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" /><span asp-validation-for="DateEcheance" class="text-danger"></span></div>
+        <div><label asp-for="MontantHT" class="form-label"></label><div class="input-group"><input asp-for="MontantHT" class="form-control js-invoice-ht" type="number" min="0" step="0.01" /><span class="input-group-text">FCFA</span></div><span asp-validation-for="MontantHT" class="text-danger"></span></div>
+        <div><label asp-for="Taxe" class="form-label"></label><div class="input-group"><input asp-for="Taxe" class="form-control js-invoice-tax" type="number" min="0" step="0.01" /><span class="input-group-text">FCFA</span></div><span asp-validation-for="Taxe" class="text-danger"></span></div>
+    </div><div class="calculation-summary"><div><span>Total TTC</span><strong><span class="js-invoice-total">@Model.MontantTTC.ToString("N0")</span> FCFA</strong></div></div></div>
+    <div class="form-actions"><a asp-action="Index" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Retour</a><button type="submit" class="btn btn-primary"><i class="bi bi-receipt"></i> Créer la facture</button></div>
+</form>
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } }

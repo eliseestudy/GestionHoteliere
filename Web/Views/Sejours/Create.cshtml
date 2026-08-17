@@ -1,0 +1,68 @@
+@model GestionHoteliere.Domain.Entities.Sejour
+
+@{
+    ViewData["Title"] = "Enregistrer une arrivée";
+}
+
+<h1>Enregistrer une arrivée</h1>
+
+<h4>Informations du séjour</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="ClientId" class="form-label"></label>
+                <select asp-for="ClientId" class="form-select" asp-items="ViewBag.ClientId">
+                    <option value="">-- Sélectionner --</option>
+                </select>
+                <span asp-validation-for="ClientId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ChambreId" class="form-label"></label>
+                <select asp-for="ChambreId" class="form-select" asp-items="ViewBag.ChambreId">
+                    <option value="">-- Sélectionner --</option>
+                </select>
+                <span asp-validation-for="ChambreId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DateEntree" class="form-label"></label>
+                <input asp-for="DateEntree" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
+                <span asp-validation-for="DateEntree" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DateSortie" class="form-label"></label>
+                <input asp-for="DateSortie" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
+                <span asp-validation-for="DateSortie" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="NbNuits" class="form-label"></label>
+                <input asp-for="NbNuits" class="form-control" />
+                <span asp-validation-for="NbNuits" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="TarifApplique" class="form-label"></label>
+                <input asp-for="TarifApplique" class="form-control" />
+                <span asp-validation-for="TarifApplique" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Remise" class="form-label"></label>
+                <input asp-for="Remise" class="form-control" />
+                <span asp-validation-for="Remise" class="text-danger"></span>
+            </div>
+            <!-- Champs de métadonnées supprimés (gérés côté serveur) -->
+            <div class="mb-3">
+                <input type="submit" value="Enregistrer l'arrivée" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-outline-secondary">Retour à la liste</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
